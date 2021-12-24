@@ -21,6 +21,12 @@ class PlayMasterController extends Controller
         $objCentralFunctionCtrl = new CentralFunctionController();
         $financial_year = $objCentralFunctionCtrl->get_financial_year();
 
+        $currentTime1 = Carbon::now()->format('H');
+
+        if($currentTime1 >= 21){
+            return response()->json(['success'=> 0,'barcode'=>0, 'purchase_date' => 0, 'purchase_time' => 0,'current_balance'=> 0], 401);
+        }
+
 
         DB::beginTransaction();
 
@@ -68,6 +74,6 @@ class PlayMasterController extends Controller
                 return response()->json(array('success' => 0, 'msg' => $e->getMessage().'<br>File:-'.$e->getFile().'<br>Line:-'.$e->getLine()),401);
             }
 
-            return response()->json(['success'=> 1,'barcode'=>$barcode, 'purchase_date' => $currentDate, 'purchase_time' => $currentTime,'current_balance'=> $currentBalance->current_balance], 200);
+            return response()->json(['success'=> 1,'barcode'=>$barcode, 'purchase_date' => $currentDate, 'purchase_time' => $currentTime1,'current_balance'=> $currentBalance->current_balance], 200);
     }
 }
